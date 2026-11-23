@@ -206,7 +206,12 @@ def main():
 
     img.save(out_path, format="PNG", optimize=True)
     size = os.path.getsize(out_path)
-    assert size < 1048576, size
+    if size >= 1048576:
+        raise SystemExit(f"output too large: {size} bytes")
+    with Image.open(out_path) as saved:
+        dims = saved.size
+    if dims != (1024, 1024):
+        raise SystemExit(f"wrong dimensions: {dims}")
 
 
 if __name__ == "__main__":
