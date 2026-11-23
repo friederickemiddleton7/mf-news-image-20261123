@@ -33,12 +33,29 @@ def main():
         )
         return 1
 
+    # Verify source is a whole PNG before copying.
+    with open(src, "rb") as fh:
+        sig = fh.read(8)
+    png_sig = b"\x89PNG\r\n\x1a\n"
+    if sig != png_sig:
+        sys.stderr.write(
+            "error: %s does not start with a valid PNG signature\n" % src
+        )
+        return 1
+
     os.makedirs(out_dir, exist_ok=True)
     shutil.copyfile(src, dst)
 
     size = os.path.getsize(dst)
     if size > 1048576:
         sys.stderr.write("error: %s is %d bytes, over the 1 MiB cap\n" % (dst, size))
+        return 1
+
+    # Confirm the copied file kept the PNG signature intact.
+    with open(dst, "rb") as fh:
+        dst_sig = fh.read(8)
+    if dst_sig != png_sig:
+        sys.stderr.write("error: copied file %s has invalid PNG signature\n" % dst)
         return 1
 
     print("wrote %s (%d bytes)" % (dst, size))
