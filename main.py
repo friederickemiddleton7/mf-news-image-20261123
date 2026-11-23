@@ -147,7 +147,11 @@ def main():
     draw.rectangle(footer_rect, fill=PALETTE["footer_bg"])
     boxes.append(footer_rect)
 
-    lead_rect = (0, 120, WIDTH, 360)
+    rule_rect = (20, 120, WIDTH - 20, 123)
+    draw.rectangle(rule_rect, fill=PALETTE["lead_bg"])
+    boxes.append(rule_rect)
+
+    lead_rect = (0, 123, WIDTH, 360)
     draw.rectangle(lead_rect, fill=PALETTE["lead_bg"])
     boxes.append(lead_rect)
 
@@ -158,7 +162,7 @@ def main():
     assert len(lead_lines) <= 3, lead_lines
     line_h = lead_font.size + 12
     total_h = len(lead_lines) * line_h
-    lead_y = 120 + (240 - total_h) / 2 - 4
+    lead_y = 123 + (237 - total_h) / 2 - 4
     for line in lead_lines:
         lw = draw.textlength(line, font=lead_font)
         lx = (WIDTH - lw) / 2
@@ -191,7 +195,7 @@ def main():
         y2 = y1 + card_h
         draw_card(draw, (x1, y1, x2, y2), PALETTE["rules"][idx], kicker, body, fonts, PALETTE, boxes)
 
-    footer_text = "WORLD NEWS IN ONE IMAGE - sources: wire reports, 23 Nov 2026"
+    footer_text = "WORLD NEWS IN ONE IMAGE - sources: wire reports, 23 Nov 2026 - 4 stories"
     ft_font = fonts["footer"]
     ft_w = draw.textlength(footer_text, font=ft_font)
     ft_h = ft_font.size
