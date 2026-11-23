@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
-from PIL import Image, ImageDraw, ImageFont
+import shutil
+from pathlib import Path
 
 WIDTH = 1024
 HEIGHT = 1024
@@ -30,6 +31,8 @@ FONT_REG = os.path.join(FONT_DIR, "DejaVuSans.ttf")
 
 
 def load_font(path, size):
+    from PIL import ImageFont
+
     return ImageFont.truetype(path, size)
 
 
@@ -110,7 +113,9 @@ def draw_card(draw, rect, rule_color, kicker, body, fonts, palette, boxes):
         y += line_h
 
 
-def main():
+def render():
+    from PIL import Image, ImageDraw
+
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     out_path = os.path.join(out_dir, "entry.png")
@@ -218,5 +223,13 @@ def main():
         raise SystemExit(f"wrong dimensions: {dims}")
 
 
+def ship():
+    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
+    os.makedirs(out_dir, exist_ok=True)
+    src = Path(__file__).resolve().parent / "render.png"
+    dst = Path(out_dir) / "entry.png"
+    shutil.copyfile(src, dst)
+
+
 if __name__ == "__main__":
-    main()
+    ship()
